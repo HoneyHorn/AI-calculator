@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Пример виджета</title>
+  <style>
+    /* Стили виджета, можно изменить по вашему усмотрению */
+    .widget-container {
+      padding: 20px;
+      border: 1px solid #ccc;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .input-group {
+      display: flex;
+      margin-bottom: 10px;
+    }
+    .input-group label {
+      width: 100px;
+      margin-right: 10px;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <div class="widget-container">
+    <h2>Пример виджета</h2>
+    <div class="input-group">
+      <label for="first_name">Имя:</label>
+      <input type="text" id="first_name">
+    </div>
+    <div class="input-group">
+      <label for="last_name">Фамилия:</label>
+      <input type="text" id="last_name">
+    </div>
+    <button onclick="submitData()">Отправить</button>
+    <div id="output"></div>
+
+    <script>
+      function submitData() {
+        const firstName = document.getElementById('first_name').value;
+        const lastName = document.getElementById('last_name').value;
+
+        fetch('/process_data', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: `first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('output').textContent = `Полученные данные: ${data.full_name}`;
+        })
+        .catch(error => {
+          console.error('Ошибка:', error);
+        });
+      }
+    </script>
+  </div>
+</body>
+</html>
