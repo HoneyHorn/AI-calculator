@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 
 @app.route('/')
 def index():
@@ -8,9 +8,15 @@ def index():
 
 @app.route('/process_data', methods=['POST'])
 def process_data():
-    first_name = request.form['first_name']
-    last_name = request.form['last_name']
-    full_name = f"{first_name} {last_name}"
+    company_name = request.form['company_name']
+    company_sphere = request.form['company_sphere']
+    number_of_employees = request.form['number_of_employees']
+    median_salary = request.form['median_salary']
+    full_name = f"""
+        Название компании: {company_name} 
+        Область деятельности: {company_sphere}
+        Количество сотрудников: {number_of_employees}
+        Средняя зарплата: {median_salary}"""
     return jsonify(full_name=full_name)
 
 if __name__ == '__main__':

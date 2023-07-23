@@ -1,0 +1,16 @@
+/* Стили виджета, можно изменить по вашему усмотрению */
+.widget-container {
+  padding: 20px;
+  border: 1px solid #ccc;
+  max-width: 400px;
+  margin: 0 auto;
+}
+.input-group {
+  display: flex;
+  margin-bottom: 10px;
+}
+.input-group label {
+  width: 100px;
+  margin-right: 10px;
+  text-align: right;
+}

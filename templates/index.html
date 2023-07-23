@@ -4,60 +4,58 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Пример виджета</title>
-  <style>
-    /* Стили виджета, можно изменить по вашему усмотрению */
-    .widget-container {
-      padding: 20px;
-      border: 1px solid #ccc;
-      max-width: 400px;
-      margin: 0 auto;
-    }
-    .input-group {
-      display: flex;
-      margin-bottom: 10px;
-    }
-    .input-group label {
-      width: 100px;
-      margin-right: 10px;
-      text-align: right;
-    }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
   <div class="widget-container">
-    <h2>Пример виджета</h2>
+    <h2>AI-Калькулятор</h2>
     <div class="input-group">
-      <label for="first_name">Имя:</label>
-      <input type="text" id="first_name">
+      <label for="company_name">Название компании:</label>
+      <input type="text" id="company_name">
     </div>
+
     <div class="input-group">
-      <label for="last_name">Фамилия:</label>
-      <input type="text" id="last_name">
+      <label for="company_sphere">Сфера деятельности компании:</label>
+      <select id="company_sphere" name="company_sphere" multiple required>
+        <option value="IT">Информационные технологии и программное обеспечение</option>
+        <option value="Finance">Финансовые услуги и банковское дело</option>
+        <option value="Manufacturing">Производство и инженерия</option>
+        <option value="Healthcare">Здравоохранение и медицина</option>
+        <option value="Retail">Розничная торговля и торговля оптом</option>
+        <option value="Automotive">Автомобильная промышленность</option>
+        <option value="Telecom">Телекоммуникации и связь</option>
+        <option value="Travel">Путешествия и туризм</option>
+        <option value="Education">Образование и образовательные услуги</option>
+        <option value="Energy">Энергетика и производство энергии</option>
+        <option value="Media">Развлечения и медиа</option>
+        <option value="RealEstate">Недвижимость и строительство</option>
+        <option value="FoodBeverage">Производство пищевых продуктов и напитков</option>
+        <option value="Logistics">Логистика и транспорт</option>
+        <option value="LegalServices">Юридические и правовые услуги</option>
+        <option value="Environment">Охрана окружающей среды и устойчивое развитие</option>
+        <option value="Advertising">Реклама и маркетинг</option>
+        <option value="Entertainment">Искусство и развлечения</option>
+        <option value="Consulting">Консалтинг и управленческие услуги</option>
+        <option value="Agriculture">Сельское хозяйство и сельское развитие</option>
+      </select>
     </div>
+
+    <div class="input-group">
+      <label for="sliderEmployee">Выберите число сотрудников:</label>
+      <input type="range" id="sliderEmployee" name="slider" min="10" max="15000" step="5" value="5000">
+      <span id="sliderValueEmployee">5000</span>
+    </div>
+
+    <div class="input-group">
+      <label for="sliderSalary">Средняя заработная плата в месяц:</label>
+      <input type="range" id="sliderSalary" name="slider" min="1000" max="1000000" step="1000" value="50000">
+      <span id="sliderValueSalary">50000</span>
+    </div>
+
     <button onclick="submitData()">Отправить</button>
+
     <div id="output"></div>
-
-    <script>
-      function submitData() {
-        const firstName = document.getElementById('first_name').value;
-        const lastName = document.getElementById('last_name').value;
-
-        fetch('/process_data', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          body: `first_name=${encodeURIComponent(firstName)}&last_name=${encodeURIComponent(lastName)}`
-        })
-        .then(response => response.json())
-        .then(data => {
-          document.getElementById('output').textContent = `Полученные данные: ${data.full_name}`;
-        })
-        .catch(error => {
-          console.error('Ошибка:', error);
-        });
-      }
-    </script>
   </div>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
