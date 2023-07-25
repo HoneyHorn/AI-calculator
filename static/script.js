@@ -21,8 +21,6 @@ function submitData() {
         // 'Content-Type': 'application/x-www-form-urlencoded'
         'Content-Type': 'application/json'
       },
-      // body: `company_name=${encodeURIComponent(companyName)}&company_sphere=${encodeURIComponent(selectedSpherepOptions)}&number_of_employees=${encodeURIComponent(numberOfEmployees)}&median_salary=${encodeURIComponent(medianSalary)}
-      //       &prompt_sentiment=${encodeURIComponent(promptSentiment)}`
       body: JSON.stringify({
         company_name: companyName,
         company_sphere: selectedSpherepOptions,
@@ -33,7 +31,6 @@ function submitData() {
     })
     .then(response => response.json())
     .then(data => {
-      // document.getElementById('output').textContent = `Полученные вопросы: ${data.questions}`;
       let questionsDiv = document.getElementById('questions');
       questionsDiv.innerHTML = '';
       for (let i = 0; i < data.questions.length; i++) {

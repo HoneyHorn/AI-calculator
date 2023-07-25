@@ -36,11 +36,6 @@ def index():
 @app.route('/process_data', methods=['POST'])
 def process_data():
     data = request.get_json()
-    # company_name = request.form['company_name']
-    # company_sphere = request.form['company_sphere']
-    # number_of_employees = request.form['number_of_employees']
-    # median_salary = request.form['median_salary']
-    # prompt_sentiment = request.form['prompt_sentiment']
     company_name = data['company_name']
     company_sphere = data['company_sphere'] # TO DO сделать ввод для поля  wizard
     number_of_employees = data['number_of_employees'] # Количество сотрудников / процент от общего / средняя зп
