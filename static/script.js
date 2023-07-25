@@ -12,16 +12,41 @@ function submitData() {
     // Медианная зарплата
     const medianSalary = document.getElementById('sliderSalary').value;
 
+    // Prompt sentiment
+    const promptSentiment = document.getElementById('promptSentiment').value;
+
     fetch('/process_data', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+        // 'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/json'
       },
-      body: `company_name=${encodeURIComponent(companyName)}&company_sphere=${encodeURIComponent(selectedSpherepOptions)}&number_of_employees=${encodeURIComponent(numberOfEmployees)}&median_salary=${encodeURIComponent(medianSalary)}`
+      // body: `company_name=${encodeURIComponent(companyName)}&company_sphere=${encodeURIComponent(selectedSpherepOptions)}&number_of_employees=${encodeURIComponent(numberOfEmployees)}&median_salary=${encodeURIComponent(medianSalary)}
+      //       &prompt_sentiment=${encodeURIComponent(promptSentiment)}`
+      body: JSON.stringify({
+        company_name: companyName,
+        company_sphere: selectedSpherepOptions,
+        number_of_employees: numberOfEmployees,
+        median_salary: medianSalary,
+        prompt_sentiment: promptSentiment
+      })
     })
     .then(response => response.json())
     .then(data => {
-      document.getElementById('output').textContent = `Полученные данные: ${data.full_name}`;
+      // document.getElementById('output').textContent = `Полученные вопросы: ${data.questions}`;
+      let questionsDiv = document.getElementById('questions');
+      questionsDiv.innerHTML = '';
+      for (let i = 0; i < data.questions.length; i++) {
+        let question = document.createElement('p');
+        question.textContent = data.questions[i];
+        questionsDiv.appendChild(question);
+
+        let answer = document.createElement('input');
+        answer.type = 'text';
+        answer.id = 'answer' + i;
+        questionsDiv.appendChild(answer);
+      }
+      
     })
     .catch(error => {
       console.error('Ошибка:', error);
@@ -35,6 +60,15 @@ function handleSliderChange(slider, sliderValue) {
         // При изменении значения ползунка обновляем значение в элементе span
         sliderValue.textContent = slider.value;
     });
+}
+
+function advancedSettings() {
+    const additionalInputContainer = document.getElementById("advancedSettingsContainer");
+    if (additionalInputContainer.style.display === "none") {
+        additionalInputContainer.style.display = "block";
+    } else {
+        additionalInputContainer.style.display = "none";
+    }
 }
 
 // Получаем элементы и передаем их в функцию для обработки
