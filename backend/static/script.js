@@ -2,6 +2,8 @@ function submitData() {
     // Название компании
     const companyName = document.getElementById('company_name').value;
 
+    const companyDescription = document.getElementById('company_description').value;
+
     // Область деятельности компании
     const companySphere = document.getElementById('company_sphere');
     const selectedSpherepOptions = Array.from(companySphere.selectedOptions).map(option => option.value);
@@ -23,6 +25,7 @@ function submitData() {
       },
       body: JSON.stringify({
         company_name: companyName,
+        company_description: companyDescription,
         company_sphere: selectedSpherepOptions,
         number_of_employees: numberOfEmployees,
         median_salary: medianSalary,
