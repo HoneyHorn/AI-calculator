@@ -1,30 +1,31 @@
-import React from 'react';
-import Step1 from './Step1';
-import Step2 from './Step2';
+import React, { useState } from 'react';
+import { Step1 } from "./Step1";
+import { Step2 } from './Step2';
 import Step3 from './Step3';
 
 function Wizard() {
-  const [step, setStep] = React.useState(1);
+  const [step, setStep] = useState(1);
+  const [companyData, setCompanyData] = useState(null)
 
-  function nextStep() {
-    setStep(step + 1);
-  }
+  const handleCompanyNext = companyData => {
+    setCompanyData(companyData);
+    setStep(2);
+  };
 
-  function prevStep() {
-    if (step > 1) {
-      setStep(step - 1);
-    }
-  }
+  const handleBack = () => {
+    if(step === 3) setStep(2);
+    if(step === 2) setStep(1);
+  };
 
   return (
     <div>
-      {step === 1 && <Step1 />}
-      {step === 2 && <Step2 />}
-      {step === 3 && <Step3 />}
-      {step > 1 && <button onClick={prevStep}>Назад</button>}
-      {step < 3 && <button onClick={nextStep}>Вперед</button>}
+      {step === 1 && <Step1 onNext={handleCompanyNext} companyData={companyData} />}
+      {step === 2 && <Step2 onBack={handleBack} companyData={companyData} />}
+      {/* {step === 2 && <Step2 onNext={handleAddressNext} address={address} onBack={handleBack} />} */}
+      {/* {step === 3 && <SummaryDisplay user={user} address={address} onBack={handleBack} />} */}
     </div>
   );
+
 }
 
 export default Wizard;

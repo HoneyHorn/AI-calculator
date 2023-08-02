@@ -57,12 +57,7 @@ calc_prompt = PromptTemplate(
 
 #     return jsonify(questions=questions)
 
-@app.route('/name', methods=['POST'])
-def get_name():
-    data = request.get_json()
-    full_name = f"{data.get('firstName')} {data.get('lastName')}"
-    print(full_name)
-    return {'name': full_name}
+
 
 if __name__ == '__main__':
     app.run(debug=True)
