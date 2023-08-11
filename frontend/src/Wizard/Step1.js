@@ -68,7 +68,7 @@ export const Step1 = ({ onNext, companyData }) => {
                     <Slider min={50} max={20000} step={50} initialValue={sliderEmployeeValue} label={"Количество сотрудников:"} onChange={handleSliderEmployeeChange}/>
                 </div>
                 
-                <button type="submit">Next</button>
+                <button type="submit">Далее</button>
             </div>
         </form>
     );
