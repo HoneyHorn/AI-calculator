@@ -6,7 +6,7 @@ export const Step1 = ({ onNext, companyData }) => {
     const [companyName, setCompanyName] = useState(companyData?.companyName || "");
     const [companyDescription, setCompanyDescription] = useState(companyData?.companyDescription || "");
     const [companySphere, setCompanySphere] = useState(companyData?.companySphere || []); // теперь сферы - это массив
-    const [sliderEmployeeValue, setEmployeeValue] = useState(companyData?.sliderEmployeeValue || 5000); //Задаем начльное значение
+    const [sliderEmployeeValue, setEmployeeValue] = useState(companyData?.sliderEmployeeValue || 5000); //Задаем начальное значение
 
     const handleCompanySphereChange = (event) => { // функция для обработки изменения сферы
         const selectedOptions = Array.from(event.target.options)
@@ -68,11 +68,7 @@ export const Step1 = ({ onNext, companyData }) => {
                     <Slider min={50} max={20000} step={50} initialValue={sliderEmployeeValue} label={"Количество сотрудников:"} onChange={handleSliderEmployeeChange}/>
                 </div>
                 
-                <div class="input-group">
-                    <Slider min={1000} max={500000} step={1000} initialValue={50000} label={"Средняя зарплата в месяц:"}/>
-                </div>
-
-                <button type="submit">Next</button>
+                <button type="submit">Далее</button>
             </div>
         </form>
     );
