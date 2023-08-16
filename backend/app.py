@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, abort, request, jsonify
 from flask_cors import CORS
 from langchain.chains import RetrievalQA
 from langchain.chat_models import ChatOpenAI
@@ -9,17 +9,16 @@ import requests
 import ast
 
 # TO DO: валидировать все входящие данные
+# TO DO: в генерации вопросов иногда проскакивает второй "пустой" вопрос. Пример:
+#   ['1. Ваша компания использует автоматизированные системы или программы для выполнения повторяющихся задач в работе с базами данных, дизайном, управлением проектами, 
+#   разработкой программного обеспечения, системным анализом или тестированием? (Да/Нет)', '', '2. Ваши сотрудники тратят большую часть рабочего времени на рутинные задачи, 
+#   которые могут быть автоматизированы с помощью искусственного интеллекта? (Да/Нет)']
 
 app = Flask(__name__)
 CORS(app)
 
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = "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"
 chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.7)
-
-
-
-calc_prompt_template = """{context}. Мы внедряем AI для автоматизации этой компании. Для сокращения расходов замененные сотрудники будут уволены. Рассчитай сколько человек можно заменить и какую сумму в год можно секономить.
-  Думай пошагово, ответь в формате Assumptions:... Thoughts:...Calculations: your preliminary calculation with numbers. You must include numbers."""
 
 profession_prompt_template = """
 Company {company_name} works in {company_sphere}. It has {employee_value} employees. It {company_descripton}. Please provide an aproximate breakdown of employees
@@ -33,11 +32,11 @@ employees are indicated.You need to help them to estimate how many people can be
 Generate a list of 2 questions that are important to ask them to give a correct estimate, separated by a new line. Questions should be in Russian and can be answered Yes or No.
 """
 
-
-calc_prompt = PromptTemplate(
-    input_variables=["context"],
-    template=calc_prompt_template
-)
+report_prompt_template = """{context}. Мы внедряем AI для автоматизации этой компании. Для сокращения расходов замененные сотрудники будут уволены. 
+Рассчитай сколько человек можно заменить и какую сумму в год можно сэкономить.
+Думай пошагово, процент должен быть предположен из надёжных статистических источников, ответь в формате Предположения:... Выводы:... Расчеты: предварительный расчет с цифрами. 
+Должны содержаться цифры.
+"""
 
 @app.route('/questions_generate', methods=['POST'])
 def questions_generate():
@@ -64,9 +63,11 @@ def questions_generate():
       HumanMessage(content=questions_prompt_format)])
 
     questions = questions.content.split('\n')
-    print(questions)
-
-    return jsonify(first_question=questions[0], second_question=questions[1])
+    if len(questions) == 2:
+        print(questions)
+        return jsonify(first_question=questions[0], second_question=questions[1])
+    else:
+        abort(400, 'Ошибка ответа Chatgpt')
 
 @app.route('/guess_profession', methods=['POST'])
 def guess_profession():
@@ -96,11 +97,40 @@ def guess_profession():
 
     return jsonify(profession_result)
 
-@app.route('/', methods=['POST', 'GET'])
-def index():
-    print(1)
+@app.route('/report_creation', methods=['POST'])
+def report_creation():
+    data = request.json
 
-    return 'Hello world'
+    company_information = data.get('companyData')
+    profession_information = data.get('professionData')
+    first_question = data.get('questinonOneValue')
+    first_question_answer = data.get('asnwerOneValue')
+    second_question = data.get('questinonTwoValue')
+    second_question_answer = data.get('answerTwoValue')
+
+    # TO DO: понять что делать со средней зарплатой, сейчас это хардкод
+    context = f"""
+    Company {company_information['companyName']} is doing business in {company_information['companySphere']} industry. They have {company_information['sliderEmployeeValue']} 
+    employees. Average monthly salary is {70000}. Here is some context in question/answer format: Question one about company: {first_question} Answer: {first_question_answer}.
+    Question two about company: {second_question} Answer: {second_question_answer}.
+    """
+
+    report_prompt = PromptTemplate(
+        input_variables=["context"],
+        template=report_prompt_template
+    )
+
+    report_prompt_format = report_prompt.format(
+        context=context,
+    )
+
+    report_bot_definition = f"You are a professional evil and cynical business consultant that specialize in AI transformation of companies";
+
+    report_result = chat([SystemMessage(content=report_bot_definition),
+        HumanMessage(content=report_prompt_format)])
+    
+    print(report_result.content)
+    return jsonify(report=report_result.content)
 
 
 if __name__ == '__main__':
