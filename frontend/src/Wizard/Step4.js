@@ -2,22 +2,22 @@ import React, { useState } from "react";
 import RadioButtonComponent from './RadioButtonComponent';
 import './wizard.css';
 
-export const Step3 = ({ onNext, questinonOneValue, onBack }) => {
-  const [answerOneValue, setAnswerOneValue] = useState('Да');
+export const Step4 = ({ onNext, questinonTwoValue, onBack }) => {
+  const [answerTwoValue, setAnswerTwoValue] = useState('Да');
   
   const handleSubmit = e => {
     e.preventDefault();
-    onNext({ answerOneValue }); // передаем профессию вместе с другими данными
+    onNext({ answerTwoValue }); // передаем профессию вместе с другими данными
   };
 
   const handleRadioChange = (event) => {
-    setAnswerOneValue(event.target.value);
+    setAnswerTwoValue(event.target.value);
   }
 
   return(
     <form onSubmit={handleSubmit}>
       <div class="widget-container">
-        <p>{questinonOneValue}</p> 
+        <p>{questinonTwoValue}</p> 
 
         <div>
             <RadioButtonComponent 
