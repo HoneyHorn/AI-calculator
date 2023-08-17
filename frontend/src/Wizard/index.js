@@ -5,16 +5,14 @@ import { Step2 } from './Step2';
 import { Step3 } from './Step3';
 import { Step4 } from './Step4';
 import { Step5 } from './Step5';
+import { Step6 } from './Step6';
 
 function Wizard() {
   const [step, setStep] = useState(1);
   const [companyData, setCompanyData] = useState(null)
   const [professionData, setProfessionData] = useState({})
-  const [questinonOneValue, setQuestinonOneValue] = useState('')
-  const [asnwerOneValue, setAsnwerOneValue] = useState('')
-  const [questinonTwoValue, setQuestinonTwoValue] = useState('')
-  const [answerTwoValue, setAnswerTwoValue] = useState('')
-  const [reportValue, setReportValue] = useState('')
+  const [questinonOne, setQuestinonOne] = useState('')
+  const [questinonTwo, setQuestinonTwo] = useState('')
 
   const handleCompanyNext = companyData => {
     setCompanyData(companyData); // Сохраняем информацию о компании
@@ -33,8 +31,8 @@ function Wizard() {
     axios.post('http://localhost:5000/questions_generate', {companyData, professionData})
       .then(response => {
         const data = response.data
-        setQuestinonOneValue(data['first_question'])
-        setQuestinonTwoValue(data['second_question'])
+        setQuestinonOne(data['first_question'])
+        setQuestinonTwo(data['second_question'])
       })
       .catch(error => {
         console.error('Error while sending data to server: ', error);
@@ -43,47 +41,39 @@ function Wizard() {
     setStep(3); // Переходим на новый шаг
   };
 
-  const handleQuestinonOneValueNext = answerOneValue => {
-    setAsnwerOneValue(answerOneValue)
+  const secondQuestion = questinonTwo => {
+    setStep(4);
+  }
 
-    setStep(4); // Переходим на новый шаг
-  };
+  const thirdQuestion = questinonThree => {
+    setStep(5);
+  }
 
-  const handleQuestinonTwoValueNext = answerTwoValue => {
-    setAnswerTwoValue(answerTwoValue)
-    
-    const post_data = {
-                        companyData, 
-                        professionData, 
-                        questinonOneValue, 
-                        asnwerOneValue,
-                        questinonTwoValue,
-                        answerTwoValue,
-                      }
+  const results = data => {
+    setStep(6);
+  }
 
-    axios.post('http://localhost:5000/report_creation', post_data)
-      .then(response => {
-        setReportValue(response.data)
-      })
-      .catch(error => {
-        console.error('Error while sending data to server: ', error);
-    });
-
-    setStep(5); // Переходим на новый шаг
-  };
+  const start = startData => {
+    setStep(1);
+  }
 
   const handleBack = () => {
-    setStep(step - 1);
-    
+    if(step === 2) setStep(1);
+    if(step === 3) setStep(2);
+    if(step === 4) setStep(3);
+    if(step === 5) setStep(4);
+    if(step === 6) setStep(5);
   };
 
   return (
     <div>
       {step === 1 && <Step1 onNext={handleCompanyNext} companyData={companyData} />}
       {step === 2 && <Step2 onBack={handleBack} onNext={handleProfessionNext} professionData={professionData} />}
-      {step === 3 && <Step3 onBack={handleBack} onNext={handleQuestinonOneValueNext} questinonOneValue={questinonOneValue}/>}
-      {step === 4 && <Step4 onBack={handleBack} onNext={handleQuestinonTwoValueNext} questinonTwoValue={questinonTwoValue}/>}
-      {step === 5 && <Step5 onBack={handleBack} reportValue={reportValue}/>}
+      {step === 3 && <Step3 onBack={handleBack} onNext={secondQuestion} questinonOne={questinonOne}/>}
+      {step === 4 && <Step4 onBack={handleBack} onNext={thirdQuestion} questinonTwo={questinonTwo}/>}
+      {step === 5 && <Step5 onBack={handleBack} onNext={results} questinonTwo={questinonTwo}/>}
+      {step === 6 && <Step6 onBack={handleBack} onNext={start} questinonTwo={questinonTwo}/>}
+      {/* {step === 2 && <Step2 onNext={handleAddressNext} address={address} onBack={handleBack} />} */}
       {/* {step === 3 && <SummaryDisplay user={user} address={address} onBack={handleBack} />} */}
     </div>
   );
