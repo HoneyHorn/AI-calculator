@@ -286,3 +286,31 @@
   cursor: pointer;
   font-weight: bold;
 }
+.circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgb(80, 108, 255);
+  border-style: solid;
+  border-color: rgb(80, 108, 255);
+}
+.circle-empty {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: transparent;
+  border-color: rgb(80, 108, 255);
+  border-style: solid;
+}
+.blue-circes {
+  margin-top: 10px;
+  display: flex;
+  align-items: self-start;
+  justify-content: center;
+}
+.line {
+  width: 30px;
+  height: 5px;
+  border-bottom-style: solid;
+  border-color: rgb(80, 108, 255);
+}

@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import './wizard.css';
 import { Range, getTrackBackground } from "react-range";
 import { ReactComponent as MySvg } from '../images/icon.svg';
+import BlueCircles from "./BlueCircles";
 
-export const Step4 = ({onNext, questinonTwo, onBack}) => {
+export const Step4 = ({onNext, questinonTwo, onBack, filledStates, setFilledStates }) => {
     const [answerTwoValue, setAnswerTwoValue] = useState('');
     const [fieldsChecked, setEnableButton] = useState(true)
     const [sliderState, setSliderState] = useState([0])
@@ -21,8 +22,34 @@ export const Step4 = ({onNext, questinonTwo, onBack}) => {
     
     const handleSubmit = e => {
       e.preventDefault();
+      setFilledStates(setCurrentStateNext());
       onNext("Вопрос №4"); // передаем профессию вместе с другими данными
     };
+
+    const handleBack = () => {
+      setFilledStates(setCurrentStateBack());
+      onBack();
+    }
+
+    function setCurrentStateNext() {
+      const changedState = filledStates;
+      if (checkFields()){
+        changedState[2] = 0;
+      }
+      else changedState[2] = 1;
+      changedState[3] = 1;
+      return changedState;
+    }
+
+    function setCurrentStateBack() {
+      const changedState = filledStates;
+      if (checkFields()){
+        changedState[2] = 0;
+      }
+      else changedState[2] = 1;
+      changedState[1] = 1;
+      return changedState;
+    }
 
     return (
         <form onSubmit={handleSubmit}>
@@ -33,6 +60,7 @@ export const Step4 = ({onNext, questinonTwo, onBack}) => {
                 <label>AI-Calculator</label>
             </div>
         </div>
+      <BlueCircles filledStates={filledStates} />
       <div class="title">
             <p>Вопрос от GPT со слайдером</p>
         </div>
@@ -124,7 +152,7 @@ export const Step4 = ({onNext, questinonTwo, onBack}) => {
         </div>
 
         <div class="navSection">
-          <button type="button" onClick={onBack}>&larr; &nbsp; Назад</button>
+          <button type="button" onClick={() => handleBack()}>&larr; &nbsp; Назад</button>
           <div>
             <button id="skip" type="submit">Пропустить вопрос</button>
             <button id="next" type="submit" disabled={fieldsChecked}>Далее &nbsp; &rarr;</button>

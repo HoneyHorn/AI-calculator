@@ -3,8 +3,9 @@ import Slider from './Slider';
 import './wizard.css';
 import { Range, getTrackBackground } from "react-range";
 import { ReactComponent as MySvg } from '../images/icon.svg';
+import BlueCircles from "./BlueCircles";
 
-export const Step2 = ({ onNext, professionData, onBack }) => {
+export const Step2 = ({ onNext, professionData, onBack, filledStates, setFilledStates }) => {
   const [slidersProfessionValues, setSlidersProfessionValues] = useState(professionData);
   const [salaryFrontend, setSalaryFrontend] = useState("");
   const [salaryBackend, setSalaryBackend] = useState("");
@@ -13,10 +14,18 @@ export const Step2 = ({ onNext, professionData, onBack }) => {
   const [fieldsChecked, setEnableButton] = useState(true);
   const [sumEmps, setSumEmps] = useState(true);
 
+  // console.log("profData: ", slidersProfessionValues)
+
   const handleSubmit = e => {
     e.preventDefault();
+    setFilledStates(setCurrentStateNext());
     onNext(professionData); // передаем профессию вместе с другими данными
   };
+
+  const handleBack = () => {
+    setFilledStates(setCurrentStateBack());
+    onBack();
+  }
 
   const handleSliderEmployeeChange = (event, profession) => {
     // Обновляем соответствующее значение в состоянии
@@ -58,24 +67,30 @@ export const Step2 = ({ onNext, professionData, onBack }) => {
     setEnableButton(checkFields());
   }
 
-  function limitCnt() {
-    if (sliderStateFront[0] + sliderStateBack[0] > 100){
-      if (sliderStateFront[0] > 50){
-        setSliderStateBack([100 - sliderStateFront[0]]);
-      }
-      if (sliderStateBack[0] > 50){
-        setSliderStateFront([100 - sliderStateBack[0]]);
-      }
+  function setCurrentStateNext() {
+    const changedState = filledStates;
+    if (checkFields()){
+      changedState[0] = 0;
     }
+    else changedState[0] = 1;
+    changedState[1] = 1;
+    return changedState;
+  }
+
+  function setCurrentStateBack() {
+    const changedState = filledStates;
+    if (checkFields()){
+      changedState[0] = 0;
+    }
+    else changedState[0] = 1;
+    return changedState;
   }
 
   useEffect(() => {
-    limitCnt();
     setEnableButton(checkFields());
   }, [sliderStateFront]);
 
   useEffect(() => {
-    limitCnt();
     setEnableButton(checkFields());
   }, [sliderStateBack]);
 
@@ -88,6 +103,7 @@ export const Step2 = ({ onNext, professionData, onBack }) => {
                 <label>AI-Calculator</label>
             </div>
         </div>
+        <BlueCircles filledStates={filledStates} />
         <div class="title">
             <p>Распределите сотрудников по профессиям</p>
         </div>
@@ -99,12 +115,10 @@ export const Step2 = ({ onNext, professionData, onBack }) => {
         {/* Количество Frontend-разработчиков */}
         <div class="input-group">
           <label>Количество</label>
-          {/* <ReactRange id="empsCnt"/> */}
           <div
               style={{
               display: "flex",
               justifyContent: "space-between",
-              // flexWrap: "wrap",
               marginTop: "1em",
               alignItems: "center",
               width: "80%"
@@ -116,7 +130,16 @@ export const Step2 = ({ onNext, professionData, onBack }) => {
               step={1}
               min={0}
               max={100}
-              onChange={(values) => {setSliderStateFront(values)}
+              onChange={(values) => {
+                if (values[0] + sliderStateBack[0] > 100){
+                  setSliderStateBack([100-values[0]])
+                }
+                setSliderStateFront(values);
+                // if (values[0] > 50) {
+                //   setSliderStateFront([50])
+                // }
+                // else setSliderStateFront(values);
+              }
               }
               renderTrack={({ props, children }) => (
               <div
@@ -204,14 +227,13 @@ export const Step2 = ({ onNext, professionData, onBack }) => {
           Backend-разработчики
         </div>
         <div class="input-2-cols">
-        {/* Количество Frontend-разработчиков */}
+        {/* Количество Backend-разработчиков */}
         <div class="input-group">
           <label>Количество</label>
           <div
               style={{
               display: "flex",
               justifyContent: "space-between",
-              // flexWrap: "wrap",
               marginTop: "1em",
               alignItems: "center",
               width: "80%"
@@ -223,7 +245,12 @@ export const Step2 = ({ onNext, professionData, onBack }) => {
               step={1}
               min={0}
               max={100}
-              onChange={(values) => {setSliderStateBack(values)}
+              onChange={(values) => {
+                if (sliderStateFront[0] + values[0] > 100){
+                  setSliderStateFront([100 - values[0]]);
+                }
+                setSliderStateBack(values)
+              }
               }
               renderTrack={({ props, children }) => (
               <div
@@ -315,10 +342,12 @@ export const Step2 = ({ onNext, professionData, onBack }) => {
 
         {/* Переходы к следующему и предыдущиму шагам */}
         <div class="navSection">
-          <button type="button" onClick={onBack}>&larr; &nbsp; Назад</button>
+          <button type="button" onClick={() => {
+            handleBack();
+          }}>&larr; &nbsp; Назад</button>
           <div>
-            <button id="skip" type="submit">Пропустить вопрос</button>
-            <button id="next" type="submit" disabled={fieldsChecked}>Далее &nbsp; &rarr;</button>
+            <button id="skip" type="submit" >Пропустить вопрос</button>
+            <button id="next" type="submit" disabled={fieldsChecked} >Далее &nbsp; &rarr;</button>
           </div>
         </div>
       </div>
