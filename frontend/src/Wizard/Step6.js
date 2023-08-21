@@ -51,7 +51,7 @@ export const Step6 = ({ onNext, companyData, onBack, filledStates, setFilledStat
                 </div>
                 <div class="info">
                     <h3>Краткое описание компании</h3>
-                    <p>Sample Text</p>
+                    <p>{companyData.companyDescription}</p>
                 </div>
                 <div class="info">
                     <h3>Количество сотрудников</h3>
