@@ -9,10 +9,17 @@ export const Step2 = ({ onNext, professionData, onBack, filledStates, setFilledS
   const [slidersProfessionValues, setSlidersProfessionValues] = useState(professionData);
   const [salaryBackend, setSalaryBackend] = useState([]);
   const [sliderStateFront, setSliderStateFront] = useState([0]);
-  const [sliderStateBack, setSliderStateBack] = useState([[0]]);
-  const [sliderStateBackStr, setSliderStateBackStr] = useState("");
+  const [sliderStateBack, setSliderStateBack] = useState(professionData.length !== 0 ? transformDataToSliders() : [[0]]);
   const [fieldsChecked, setEnableButton] = useState(true);
   const [sumEmps, setSumEmps] = useState(true);
+
+  function transformDataToSliders() {
+    const arr = [];
+    Object.entries(professionData).map(([profession, percentage], index) => {
+      arr[index] = [percentage];
+    })
+    return arr;
+  }
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -38,12 +45,6 @@ export const Step2 = ({ onNext, professionData, onBack, filledStates, setFilledS
   };
 
   function checkFields() {
-    // if (document.getElementById("salaryFrontend").value.length === 0){
-    //     return true;
-    // }
-    // else if (isNaN(document.getElementById("salaryFrontend").value)){
-    //   return true;
-    // }
     if (Object.keys(slidersProfessionValues).length === 0)
       return true;
     let salaryFields = (document.getElementsByClassName('salary'));

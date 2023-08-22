@@ -4,9 +4,9 @@ import './wizard.css';
 import { ReactComponent as MySvg } from '../images/icon.svg';
 import BlueCircles from "./BlueCircles";
 
-export const Step3 = ({ onNext, questinonOne, onBack, filledStates, setFilledStates }) => {
+export const Step3 = ({ onNext, questionOne, onBack, filledStates, setFilledStates }) => {
   const [answerOneValue, setAnswerOneValue] = useState('');
-  const [fieldsChecked, setEnableButton] = useState(true)
+  const [fieldsChecked, setEnableButton] = useState(true);
 
   function checkFields() {
     if (!document.querySelector('input[name="answers"]:checked')){
@@ -62,13 +62,16 @@ export const Step3 = ({ onNext, questinonOne, onBack, filledStates, setFilledSta
       </div>
       <BlueCircles filledStates={filledStates} />
       <div class="title">
-            <p>Вопрос от GPT с выбором ответа</p>
-        </div>
+          <p>Вопрос от GPT с выбором ответа</p>
+      </div>
+      <div class={questionOne.length === 0 ? "loader-wrapper" : "loader-wrapper-hide"}>
+        <div class="loader"></div>
+      </div>
         <div class="gpt-question">
-          {/* <p>{questinonOne}</p>  */}
-          <p>Захардоженный текст. Здесть будет распологаться вопрос от GPT</p>
+          <p>{questionOne}</p> 
+          {/* <p>Захардоженный текст. Здесть будет распологаться вопрос от GPT</p> */}
         </div>
-        <div class="answer">
+        <div class={questionOne.length !== 0 ? "answer" : "answer-hide"}>
           <div class="showSpheres">
           <input type="radio" name="answers" value="Да" id="Yes"
             onChange={() => {

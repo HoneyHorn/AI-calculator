@@ -11,9 +11,9 @@ function Wizard() {
   const [step, setStep] = useState(1);
   const [companyData, setCompanyData] = useState(null)
   const [professionData, setProfessionData] = useState({})
-  const [questinonOne, setQuestinonOne] = useState('')
-  const [questinonTwo, setQuestinonTwo] = useState('')
-  const [filledStates, setFilledStates] = useState([0, 0, 0, 0, 0])
+  const [questionOne, setQuestinonOne] = useState('')
+  const [questionTwo, setQuestinonTwo] = useState('')
+  const [filledStates, setFilledStates] = useState([0, 0, 0, 0])
 
   const handleCompanyNext = companyData => {
     setCompanyData(companyData); // Сохраняем информацию о компании
@@ -75,10 +75,10 @@ function Wizard() {
     <div>
       {step === 1 && <Step1 onNext={handleCompanyNext} companyData={companyData} filledStates={filledStates} setFilledStates={setFilledStates}/>}
       {step === 2 && <Step2 onBack={handleBack} onNext={handleProfessionNext} professionData={professionData} filledStates={filledStates} setFilledStates={setFilledStates}/>}
-      {step === 3 && <Step3 onBack={handleBack} onNext={secondQuestion} questinonOne={questinonOne} filledStates={filledStates} setFilledStates={setFilledStates}/>}
-      {step === 4 && <Step4 onBack={handleBack} onNext={thirdQuestion} questinonTwo={questinonTwo} filledStates={filledStates} setFilledStates={setFilledStates}/>}
-      {step === 5 && <Step5 onBack={handleBack} onNext={results} questinonTwo={questinonTwo} filledStates={filledStates} setFilledStates={setFilledStates}/>}
-      {step === 6 && <Step6 onBack={handleBack} onNext={start} companyData={companyData} filledStates={filledStates} setFilledStates={setFilledStates}/>}
+      {step === 3 && <Step3 onBack={handleBack} onNext={secondQuestion} questionOne={questionOne} filledStates={filledStates} setFilledStates={setFilledStates}/>}
+      {step === 4 && <Step4 onBack={handleBack} onNext={results} questionTwo={questionTwo} filledStates={filledStates} setFilledStates={setFilledStates}/>}
+      {/* {step === 5 && <Step5 onBack={handleBack} onNext={results} questinonTwo={questinonTwo} filledStates={filledStates} setFilledStates={setFilledStates}/>} */}
+      {step === 6 && <Step6 onBack={handleBack} questinonOne={questionOne} questionTwo={questionTwo} onNext={start} companyData={companyData} filledStates={filledStates} setFilledStates={setFilledStates}/>}
       {/* {step === 2 && <Step2 onNext={handleAddressNext} address={address} onBack={handleBack} />} */}
       {/* {step === 3 && <SummaryDisplay user={user} address={address} onBack={handleBack} />} */}
     </div>

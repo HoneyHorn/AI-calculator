@@ -3,7 +3,7 @@ import './wizard.css';
 import { ReactComponent as MySvg } from '../images/icon.svg';
 import BlueCircles from "./BlueCircles";
 
-export const Step6 = ({ onNext, companyData, onBack, filledStates, setFilledStates }) => {
+export const Step6 = ({ onNext, companyData, questionOne, questionTwo, filledStates, setFilledStates }) => {
   const [answerThreeValue, setAnswerThreeValue] = useState('');
   const [fieldsChecked, setEnableButton] = useState(true);
 
@@ -15,7 +15,7 @@ export const Step6 = ({ onNext, companyData, onBack, filledStates, setFilledStat
   }
 
   function setCurrentStateNext() {
-    const changedState = [0, 0, 0, 0, 0];
+    const changedState = [0, 0, 0, 0];
     return changedState;
   }
 
@@ -43,7 +43,10 @@ export const Step6 = ({ onNext, companyData, onBack, filledStates, setFilledStat
         <div class="title">
             <p>Поздравляем с прохожднием тестирования!</p>
         </div>
-        <div class="result">
+        <div class={questionOne?.length === 0 || questionTwo?.length === 0 ? "loader-wrapper" : "loader-wrapper-hide"}>
+            <div class="loader"></div>
+        </div>
+        <div class={questionOne?.length === 0 || questionTwo?.length === 0 ? "result" : "result-hide"}>
             <div class="left-bars">
                 <div class="info">
                     <h3>Название компании</h3>
@@ -55,17 +58,17 @@ export const Step6 = ({ onNext, companyData, onBack, filledStates, setFilledStat
                 </div>
                 <div class="info">
                     <h3>Количество сотрудников</h3>
-                    <p>Sample Text</p>
+                    <p>{companyData.sliderEmployeeValue}</p>
                 </div>
                 <div class="info">
                     <h3>Распределение сотрудников</h3>
                 </div>
                 <div class="info">
-                    <h3>Вопрос 1</h3>
+                    <h3>{questionOne}</h3>
                     <p>Sample Text</p>
                 </div>
                 <div class="info">
-                    <h3>Вопрос 2</h3>
+                    <h3>{questionTwo}</h3>
                     <p>Sample Text</p>
                 </div>
             </div>
@@ -81,7 +84,7 @@ export const Step6 = ({ onNext, companyData, onBack, filledStates, setFilledStat
             </div>
         </div>
         
-        <div class="pdf-bar">
+        <div class={questionOne?.length === 0 || questionTwo?.length === 0 ? "pdf-bar" : "pdf-bar-hide"}>
             <label>Можете скачать отчет в PDF и получить результаты письмом на электронную почту</label>
             <div class="pdf-bar-buttons">
                 <button type="button" id="download" onClick={() => console.log("downloaded")}>Скачать</button>
