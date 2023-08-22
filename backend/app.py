@@ -17,7 +17,7 @@ import ast
 app = Flask(__name__)
 CORS(app)
 
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = "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"
 chat = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.7)
 
 profession_prompt_template = """
