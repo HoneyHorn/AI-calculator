@@ -2,15 +2,16 @@ import React, { useEffect, useRef, useState } from "react";
 import './wizard.css';
 import { Range, getTrackBackground } from "react-range";
 import { ReactComponent as MySvg } from '../images/icon.svg';
+import BlueCircles from "./BlueCircles";
 
-export const Step1 = ({ onNext, companyData, onBack }) => {
+export const Step1 = ({ onNext, companyData, onBack, filledStates, setFilledStates }) => {
     const [companyName, setCompanyName] = useState(companyData?.companyName || "");
     const [companyDescription, setCompanyDescription] = useState(companyData?.companyDescription || "");
     const [companySphere, setCompanySphere] = useState(companyData?.companySphere || []); // теперь сферы - это массив
     const [sliderEmployeeValue, setEmployeeValue] = useState(companyData?.sliderEmployeeValue || 0); //Задаем начальное значение
     const [currLength, setCurrCompayInfo] = useState(0);
-    const [sliderState, setSliderState] = useState(companyData?.sliderEmployeeValue || [0])
-    const [fieldsChecked, setEnableButton] = useState(true)
+    const [sliderState, setSliderState] = useState(companyData?.sliderEmployeeValue || [0]);
+    const [fieldsChecked, setEnableButton] = useState(true);
 
     const spheresShow = [
         {id: 'IT', name: 'IT'},
@@ -51,8 +52,15 @@ export const Step1 = ({ onNext, companyData, onBack }) => {
 
     const handleSubmit = e => {
         e.preventDefault();
+        setFilledStates(setCurrentState());
         onNext({ companyName, companyDescription, companySphere,  sliderEmployeeValue}); // передаем профессию вместе с другими данными
     };
+
+    function setCurrentState() {
+        const changedState = filledStates;
+        changedState[0] = 1;
+        return changedState;
+      }
 
     const limitCnt = 100;
 
@@ -97,6 +105,7 @@ export const Step1 = ({ onNext, companyData, onBack }) => {
                         <label>AI-Calculator</label>
                     </div>
                 </div>
+                <BlueCircles filledStates={filledStates} />
                 <div class="title">
                     <p>Введите информацию о компании</p>
                 </div>

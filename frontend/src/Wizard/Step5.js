@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import './wizard.css';
 import { ReactComponent as MySvg } from '../images/icon.svg';
+import BlueCircles from "./BlueCircles";
 
-export const Step5 = ({ onNext, questinonOne, onBack }) => {
+export const Step5 = ({ onNext, questinonOne, onBack, filledStates, setFilledStates }) => {
   const [answerThreeValue, setAnswerThreeValue] = useState('');
   const [fieldsChecked, setEnableButton] = useState(true)
 
@@ -16,12 +17,38 @@ export const Step5 = ({ onNext, questinonOne, onBack }) => {
   function changeAnswer(event){
     setAnswerThreeValue(event.target.value);
     setEnableButton(checkFields());
-}
+  }
+
+  function setCurrentStateNext() {
+    const changedState = filledStates;
+    if (checkFields()){
+      changedState[3] = 0;
+    }
+    else changedState[3] = 1;
+    changedState[4] = 1;
+    return changedState;
+  }
+
+  function setCurrentStateBack() {
+    const changedState = filledStates;
+    if (checkFields()){
+      changedState[3] = 0;
+    }
+    else changedState[3] = 1;
+    changedState[2] = 1;
+    return changedState;
+  }
   
   const handleSubmit = e => {
     e.preventDefault();
+    setFilledStates(setCurrentStateNext());
     onNext( "Вопро №3" ); // передаем профессию вместе с другими данными
   };
+
+  const handleBack = () => {
+    setFilledStates(setCurrentStateBack());
+    onBack();
+  }
 
   return(
     <form onSubmit={handleSubmit}>
@@ -32,6 +59,7 @@ export const Step5 = ({ onNext, questinonOne, onBack }) => {
                 <label>AI-Calculator</label>
             </div>
         </div>
+      <BlueCircles filledStates={filledStates} />
       <div class="title">
             <p>Вопрос от GPT с выбором ответа</p>
         </div>
@@ -44,7 +72,9 @@ export const Step5 = ({ onNext, questinonOne, onBack }) => {
         </div>
 
         <div class="navSection">
-          <button type="button" onClick={onBack}>&larr; &nbsp; Назад</button>
+          <button type="button" onClick={() => {
+            handleBack();
+          }}>&larr; &nbsp; Назад</button>
           <div>
             <button id="skip" type="submit">Пропустить вопрос</button>
             <button id="next" type="submit" disabled={fieldsChecked}>Далее &nbsp; &rarr;</button>

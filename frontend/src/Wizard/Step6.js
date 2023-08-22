@@ -1,16 +1,22 @@
 import React, { useState } from "react";
 import './wizard.css';
 import { ReactComponent as MySvg } from '../images/icon.svg';
+import BlueCircles from "./BlueCircles";
 
-export const Step6 = ({ onNext, questinonOne, onBack }) => {
+export const Step6 = ({ onNext, companyData, onBack, filledStates, setFilledStates }) => {
   const [answerThreeValue, setAnswerThreeValue] = useState('');
-  const [fieldsChecked, setEnableButton] = useState(true)
+  const [fieldsChecked, setEnableButton] = useState(true);
 
   function checkFields() {
     if (document.getElementById("answer-imput").value.length === 0){
         return true;
     }
     return false;
+  }
+
+  function setCurrentStateNext() {
+    const changedState = [0, 0, 0, 0, 0];
+    return changedState;
   }
 
   function changeAnswer(event){
@@ -20,6 +26,7 @@ export const Step6 = ({ onNext, questinonOne, onBack }) => {
   
   const handleSubmit = e => {
     e.preventDefault();
+    setFilledStates(setCurrentStateNext());
     onNext( "Вопро №3" ); // передаем профессию вместе с другими данными
   };
 
@@ -32,6 +39,7 @@ export const Step6 = ({ onNext, questinonOne, onBack }) => {
                 <label>AI-Calculator</label>
             </div>
         </div>
+      <BlueCircles filledStates={filledStates} />
         <div class="title">
             <p>Поздравляем с прохожднием тестирования!</p>
         </div>
@@ -39,11 +47,11 @@ export const Step6 = ({ onNext, questinonOne, onBack }) => {
             <div class="left-bars">
                 <div class="info">
                     <h3>Название компании</h3>
-                    <p>Sample Text</p>
+                    <p>{companyData.companyName}</p>
                 </div>
                 <div class="info">
                     <h3>Краткое описание компании</h3>
-                    <p>Sample Text</p>
+                    <p>{companyData.companyDescription}</p>
                 </div>
                 <div class="info">
                     <h3>Количество сотрудников</h3>
