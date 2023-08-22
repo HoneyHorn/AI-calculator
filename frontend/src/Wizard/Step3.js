@@ -18,7 +18,7 @@ export const Step3 = ({ onNext, questionOne, onBack, filledStates, setFilledStat
   const handleSubmit = e => {
     e.preventDefault();
     setFilledStates(setCurrentStateNext());
-    onNext( "Вопро №2" ); // передаем профессию вместе с другими данными
+    onNext( document.querySelector('input[name="answers"]:checked').value ); // передаем профессию вместе с другими данными
   };
 
   const handleBack = () => {

@@ -9,11 +9,14 @@ import { Step6 } from './Step6';
 
 function Wizard() {
   const [step, setStep] = useState(1);
-  const [companyData, setCompanyData] = useState(null)
-  const [professionData, setProfessionData] = useState({})
-  const [questionOne, setQuestinonOne] = useState('')
-  const [questionTwo, setQuestinonTwo] = useState('')
-  const [filledStates, setFilledStates] = useState([0, 0, 0, 0])
+  const [companyData, setCompanyData] = useState(null);
+  const [professionData, setProfessionData] = useState({});
+  const [questionOne, setQuestinonOne] = useState('');
+  const [questionTwo, setQuestinonTwo] = useState('');
+  const [filledStates, setFilledStates] = useState([0, 0, 0, 0]);
+  const [answerOne, setAnswerOne] = useState('');
+  const [answerTwo, setAnswerTwo] = useState('');
+  const [reportValue, setReportValue] = useState('');
 
   const handleCompanyNext = companyData => {
     setCompanyData(companyData); // Сохраняем информацию о компании
@@ -40,6 +43,36 @@ function Wizard() {
     });
 
     setStep(3); // Переходим на новый шаг
+  };
+
+  const handleQuestinonOneValueNext = answerOneValue => {
+    console.log("answer 1: ", answerOneValue)
+    setAnswerOne(answerOneValue);
+
+    setStep(4); // Переходим на новый шаг
+  };
+
+  const handleQuestinonTwoValueNext = answerTwoValue => {
+    setAnswerTwo(answerTwoValue)
+    
+    const post_data = {
+      companyData, 
+      professionData, 
+      questionOne, 
+      answerOne,
+      questionTwo,
+      answerTwoValue,
+    }
+
+    axios.post('http://localhost:5000/report_creation', post_data)
+      .then(response => {
+        setReportValue(response.data)
+      })
+      .catch(error => {
+        console.error('Error while sending data to server: ', error);
+    });
+
+    setStep(6); // Переходим на новый шаг
   };
 
   const secondQuestion = questinonTwo => {
@@ -75,10 +108,10 @@ function Wizard() {
     <div>
       {step === 1 && <Step1 onNext={handleCompanyNext} companyData={companyData} filledStates={filledStates} setFilledStates={setFilledStates}/>}
       {step === 2 && <Step2 onBack={handleBack} onNext={handleProfessionNext} professionData={professionData} filledStates={filledStates} setFilledStates={setFilledStates}/>}
-      {step === 3 && <Step3 onBack={handleBack} onNext={secondQuestion} questionOne={questionOne} filledStates={filledStates} setFilledStates={setFilledStates}/>}
-      {step === 4 && <Step4 onBack={handleBack} onNext={results} questionTwo={questionTwo} filledStates={filledStates} setFilledStates={setFilledStates}/>}
+      {step === 3 && <Step3 onBack={handleBack} onNext={handleQuestinonOneValueNext} questionOne={questionOne} filledStates={filledStates} setFilledStates={setFilledStates}/>}
+      {step === 4 && <Step4 onBack={handleBack} onNext={handleQuestinonTwoValueNext} questionTwo={questionTwo} filledStates={filledStates} setFilledStates={setFilledStates}/>}
       {/* {step === 5 && <Step5 onBack={handleBack} onNext={results} questinonTwo={questinonTwo} filledStates={filledStates} setFilledStates={setFilledStates}/>} */}
-      {step === 6 && <Step6 onBack={handleBack} questinonOne={questionOne} questionTwo={questionTwo} onNext={start} companyData={companyData} filledStates={filledStates} setFilledStates={setFilledStates}/>}
+      {step === 6 && <Step6 onBack={handleBack} professionData={professionData} reportValue={reportValue} answerOne={answerOne} answerTwo={answerTwo} questionOne={questionOne} questionTwo={questionTwo} onNext={start} companyData={companyData} filledStates={filledStates} setFilledStates={setFilledStates}/>}
       {/* {step === 2 && <Step2 onNext={handleAddressNext} address={address} onBack={handleBack} />} */}
       {/* {step === 3 && <SummaryDisplay user={user} address={address} onBack={handleBack} />} */}
     </div>
