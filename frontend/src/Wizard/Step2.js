@@ -7,15 +7,12 @@ import BlueCircles from "./BlueCircles";
 
 export const Step2 = ({ onNext, professionData, onBack, filledStates, setFilledStates }) => {
   const [slidersProfessionValues, setSlidersProfessionValues] = useState(professionData);
-  const [salaryFrontend, setSalaryFrontend] = useState("");
   const [salaryBackend, setSalaryBackend] = useState([]);
   const [sliderStateFront, setSliderStateFront] = useState([0]);
   const [sliderStateBack, setSliderStateBack] = useState([[0]]);
+  const [sliderStateBackStr, setSliderStateBackStr] = useState("");
   const [fieldsChecked, setEnableButton] = useState(true);
   const [sumEmps, setSumEmps] = useState(true);
-  const [tempVar, setTempVar] = useState([])
-
-  // console.log("profData: ", slidersProfessionValues)
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -30,14 +27,14 @@ export const Step2 = ({ onNext, professionData, onBack, filledStates, setFilledS
 
   const handleSliderEmployeeChange = (profession, value, index) => {
     // Обновляем соответствующее значение в состоянии
+    const newArr = sliderStateBack;
     const val = value * 1
+    newArr[index] = [value * 1];
+    // setSliderStateBack(newArr);
     setSlidersProfessionValues(prevState => ({
       ...prevState,
       [profession]: val
     }));
-    const newArr = sliderStateBack;
-    newArr[index] = [value * 1];
-    setSliderStateBack(newArr);
   };
 
   function checkFields() {
@@ -62,15 +59,11 @@ export const Step2 = ({ onNext, professionData, onBack, filledStates, setFilledS
     return false;
   }
 
-  function changeSalaryFront(event){
-    setSalaryFrontend(event.target.value);
-    setEnableButton(checkFields());
-  }
-
   function changeSalaryBack(event, index){
     const newSalary = salaryBackend;
     newSalary[index] = event.target.value;
     setSalaryBackend(newSalary);
+    console.log("salaryBack: ", salaryBackend);
     setEnableButton(checkFields());
   }
 
@@ -113,10 +106,10 @@ export const Step2 = ({ onNext, professionData, onBack, filledStates, setFilledS
     const newArr = sliderStateBack;
     Object.entries(slidersProfessionValues).map(([profession, percentage], index) => {
       newArr[index] = [percentage * 1];
-      setSliderStateBack(newArr);
     })
+    setSliderStateBack(newArr);
     console.log('sliderStateBack: ', sliderStateBack);
-  }, [sliderStateBack, slidersProfessionValues])
+  }, [slidersProfessionValues])
 
 
   return(
@@ -165,7 +158,7 @@ export const Step2 = ({ onNext, professionData, onBack, filledStates, setFilledS
                         //   setSliderStateFront([100 - values[0]]);
                         // }
                         // setSliderStateBack(values)
-                        handleSliderEmployeeChange(profession, values);
+                        handleSliderEmployeeChange(profession, values, index);
                       } }
                       renderTrack={({ props, children }) => (
                         <div
@@ -243,7 +236,7 @@ export const Step2 = ({ onNext, professionData, onBack, filledStates, setFilledS
                 </div>
                 <div class='input-group'>
                   <label>Средняя заработная плата</label>
-                  <input class="salary" id={"salary" + index} type="text" value={salaryBackend[index]} onChange={e => changeSalaryBack(e, index)} placeholder="Ввести" />
+                  <input class="salary" id={"salary" + index} type="text" onChange={e => changeSalaryBack(e, index)} placeholder="Ввести" />
                 </div>
               </div>
             </div></>
