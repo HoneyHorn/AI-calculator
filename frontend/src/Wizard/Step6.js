@@ -65,7 +65,7 @@ export const Step6 = ({ onNext, companyData, professionData, reportValue, answer
                 <div class="info">
                     <h3>Распределение сотрудников</h3>
                     {Object.entries(professionData).map(([key, value]) => (
-                        <p>{key}: {Math.round(companyData.sliderEmployeeValue / 100) * professionData[key]} чел</p>
+                        <p>{key}: {Math.round(companyData.sliderEmployeeValue / 100 * professionData[key])} чел</p>
                     ))}
                     {/* <p>{professionData}</p> */}
                 </div>

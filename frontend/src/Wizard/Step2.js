@@ -22,6 +22,9 @@ export const Step2 = ({ onNext, professionData, onBack, filledStates, setFilledS
   }
 
   const handleSubmit = e => {
+    Object.entries(professionData).map(([profession, percentage], index) => {
+      professionData[profession] = sliderStateBack[index][0];
+    })
     e.preventDefault();
     setFilledStates(setCurrentStateNext());
     onNext(professionData); // передаем профессию вместе с другими данными
