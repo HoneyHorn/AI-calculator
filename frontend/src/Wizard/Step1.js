@@ -53,7 +53,7 @@ export const Step1 = ({ onNext, companyData, onBack, filledStates, setFilledStat
     const handleSubmit = e => {
         e.preventDefault();
         setFilledStates(setCurrentState());
-        onNext({ companyName, companyDescription, companySphere,  sliderEmployeeValue}); // передаем профессию вместе с другими данными
+        onNext({ companyName, companyDescription, companySphere,  sliderEmployeeValue});
     };
 
     function setCurrentState() {
@@ -180,7 +180,10 @@ export const Step1 = ({ onNext, companyData, onBack, filledStates, setFilledStat
                         step={1}
                         min={0}
                         max={1000}
-                        onChange={(values) => {setSliderState(values)}
+                        onChange={(values) => {
+                            setSliderState(values);
+                            setEmployeeValue(values[0])
+                        }
                         }
                         renderTrack={({ props, children }) => (
                         <div

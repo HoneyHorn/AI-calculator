@@ -197,7 +197,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 30%
+  width: 40%
 }
 .info {
   width: 100%;
@@ -321,6 +321,15 @@
   margin-bottom: 10px;
 }
 .loader-wrapper-hide {
+  display: none;
+}
+.answer-hide {
+  display: none;
+}
+.result-hide {
+  display: none;
+}
+.pdf-bar-hide {
   display: none;
 }
 .loader {
