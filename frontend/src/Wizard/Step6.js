@@ -7,8 +7,6 @@ export const Step6 = ({ onNext, companyData, professionData, reportValue, answer
   const [answerThreeValue, setAnswerThreeValue] = useState('');
   const [fieldsChecked, setEnableButton] = useState(true);
 
-  console.log("RV: ", reportValue);
-
   function checkFields() {
     if (document.getElementById("answer-imput").value.length === 0){
         return true;

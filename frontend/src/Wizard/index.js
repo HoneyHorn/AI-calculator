@@ -88,6 +88,13 @@ function Wizard() {
   }
 
   const start = startData => {
+    setCompanyData(null);
+    setProfessionData({});
+    setQuestinonOne('');
+    setQuestinonTwo('');
+    setAnswerOne('');
+    setAnswerTwo('');
+    setReportValue('');
     setStep(1);
   }
 

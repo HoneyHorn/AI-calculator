@@ -33,13 +33,31 @@ export const Step2 = ({ onNext, professionData, onBack, filledStates, setFilledS
   const handleBack = () => {
     setFilledStates(setCurrentStateBack());
     onBack();
+  };
+
+  function limitPercentage() {
+    let sum = 0;
+    Object.entries(slidersProfessionValues).map(([profession, percentage], index) => {
+      sum += percentage;
+    })
+    if (100 - sum < 0){
+      console.log('limitPercentage: ', 0);
+      return 0;
+    }
+    console.log('limitPercentage: ', 100-sum);
+    return 100 - sum;
   }
 
   const handleSliderEmployeeChange = (profession, value, index) => {
     // Обновляем соответствующее значение в состоянии
     const newArr = sliderStateBack;
     const val = value * 1
-    newArr[index] = [value * 1];
+    // newArr[index] = [value * 1];
+    if (newArr[index])
+      if (newArr[index][0] + limitPercentage() >= value * 1)
+        newArr[index] = [value * 1];
+      else newArr[index] = [newArr[index][0] + limitPercentage()]
+    else newArr[index] = [value * 1];
     // setSliderStateBack(newArr);
     setSlidersProfessionValues(prevState => ({
       ...prevState,
@@ -109,7 +127,12 @@ export const Step2 = ({ onNext, professionData, onBack, filledStates, setFilledS
     console.log('slidersProfessionValues: ', slidersProfessionValues);
     const newArr = sliderStateBack;
     Object.entries(slidersProfessionValues).map(([profession, percentage], index) => {
-      newArr[index] = [percentage * 1];
+      if (newArr[index])
+        if (newArr[index][0] + limitPercentage() >= percentage * 1)
+          newArr[index] = [percentage * 1];
+        else newArr[index] = [newArr[index][0] + limitPercentage()]
+      else newArr[index] = [percentage * 1];
+      // newArr[index] = [percentage * 1];
     })
     setSliderStateBack(newArr);
     console.log('sliderStateBack: ', sliderStateBack);
